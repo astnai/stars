@@ -1,4 +1,4 @@
-# Stars Art
+# Stars
 
 This repository contains a simple webpage featuring a textarea where users can create artworks using star characters. As the textarea expands, more stars are displayed. The project aims to merge the beauty of stars with technology in a simple and accessible way, allowing users to create their own starry masterpieces.
 
