@@ -3,9 +3,8 @@ document.addEventListener('DOMContentLoaded', function() {
   const textarea = document.getElementById('stars');
   
   // Generate initial stars with reduced spacing
-  const initialStars = generateStars(40, 150, 5);
-  textarea.value = initialStars;
-  
+  generateAndSetStars(textarea);
+
   // Add event listener for click events on textarea
   textarea.addEventListener('click', function(event) {
     // Calculate click position relative to textarea
@@ -16,30 +15,38 @@ document.addEventListener('DOMContentLoaded', function() {
     const rows = textarea.rows;
     const colIndex = Math.floor(x / (rect.width / cols));
     const rowIndex = Math.floor(y / (rect.height / rows));
-    const starsToAdd = generateStars(1, 1, 0);
+    const starsToAdd = getRandomStar();
     const starsArray = textarea.value.split('\n');
   
     // Update textarea value with new star at clicked position
     starsArray[rowIndex] = starsArray[rowIndex].substring(0, colIndex) + starsToAdd + starsArray[rowIndex].substring(colIndex + 1);
     textarea.value = starsArray.join('\n');
   });
-  
+
+  // Update stars
+  setInterval(function() {
+    generateAndSetStars(textarea);
+  }, 10000);
+
+  // Function to generate and set stars
+  function generateAndSetStars(textarea) {
+    const stars = generateStars(textarea.rows, textarea.cols);
+    textarea.value = stars;
+  }
+
   // Function to generate stars
-  function generateStars(rows, cols, spacing) {
+  function generateStars(rows, cols) {
     let stars = '';
     for (let i = 0; i < rows; i++) {
-      let lastCharWasSpace = true; // Initialize to true to allow stars at the beginning of the row
       for (let j = 0; j < cols; j++) {
-        // Adjust this probability to control star density (increase it for more stars)
-        if (Math.random() < 0.4 && lastCharWasSpace) {
+        if (Math.random() < 0.2) {
           stars += getRandomStar();
-          lastCharWasSpace = false;
+          const randomSpaces = Math.floor(Math.random() * 3); // Generate random number of spaces (0-2)
+          for (let s = 0; s < randomSpaces; s++) {
+            stars += ' '; // Add random number of spaces
+          }
         } else {
-          stars += ' ';
-          lastCharWasSpace = true;
-        }
-        for (let s = 0; s < spacing; s++) {
-          stars += ' '; // Add spaces for reduced spacing between stars
+          stars += '   '; // Add 3 spaces for non-star positions
         }
       }
       stars += '\n'; // Newline after each row
