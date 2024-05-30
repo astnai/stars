@@ -1,62 +1,65 @@
 document.addEventListener('DOMContentLoaded', function() {
-  // Get the textarea element
-  const textarea = document.getElementById('stars');
+    const textarea = document.getElementById('stars');
   
-  // Generate initial stars with reduced spacing
-  generateAndSetStars(textarea);
-
-  // Add event listener for click events on textarea
-  textarea.addEventListener('click', function(event) {
-    // Calculate click position relative to textarea
-    const rect = event.target.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-    const cols = textarea.cols;
-    const rows = textarea.rows;
-    const colIndex = Math.floor(x / (rect.width / cols));
-    const rowIndex = Math.floor(y / (rect.height / rows));
-    const starsToAdd = getRandomStar();
-    const starsArray = textarea.value.split('\n');
+    // Generar estrellas iniciales
+    generateAndSetStars();
   
-    // Update textarea value with new star at clicked position
-    starsArray[rowIndex] = starsArray[rowIndex].substring(0, colIndex) + starsToAdd + starsArray[rowIndex].substring(colIndex + 1);
-    textarea.value = starsArray.join('\n');
-  });
-
-  // Update stars
-  setInterval(function() {
-    generateAndSetStars(textarea);
-  }, 10000);
-
-  // Function to generate and set stars
-  function generateAndSetStars(textarea) {
-    const stars = generateStars(textarea.rows, textarea.cols);
-    textarea.value = stars;
-  }
-
-  // Function to generate stars
-  function generateStars(rows, cols) {
-    let stars = '';
-    for (let i = 0; i < rows; i++) {
-      for (let j = 0; j < cols; j++) {
-        if (Math.random() < 0.2) {
-          stars += getRandomStar();
-          const randomSpaces = Math.floor(Math.random() * 3); // Generate random number of spaces (0-2)
-          for (let s = 0; s < randomSpaces; s++) {
-            stars += ' '; // Add random number of spaces
-          }
-        } else {
-          stars += '   '; // Add 3 spaces for non-star positions
+    // Listener para eventos de clic en el textarea
+    textarea.addEventListener('click', function(event) {
+      const rect = event.target.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      const cols = textarea.cols;
+      const rows = textarea.rows;
+      const colIndex = Math.floor(x / (rect.width / cols));
+      const rowIndex = Math.floor(y / (rect.height / rows));
+      const starsToAdd = getRandomStar();
+      const starsArray = textarea.value.split('\n');
+  
+      if (rowIndex < starsArray.length) {
+        const line = starsArray[rowIndex];
+        if (colIndex < line.length) {
+          starsArray[rowIndex] = line.substring(0, colIndex) + starsToAdd + line.substring(colIndex + 1);
+          textarea.value = starsArray.join('\n');
         }
       }
-      stars += '\n'; // Newline after each row
-    }
-    return stars;
-  }
+    });
   
-  // Function to get a random star character
-  function getRandomStar() {
-    const stars = ['.', '*', '+']; // You can add more star characters here if needed
-    return stars[Math.floor(Math.random() * stars.length)];
-  }
-});
+    // Función para generar y establecer estrellas
+    function generateAndSetStars() {
+      const rows = textarea.rows;
+      const cols = textarea.cols;
+      textarea.value = generateStars(rows, cols);
+    }
+  
+    // Función para generar estrellas
+    function generateStars(rows, cols) {
+      let stars = '';
+      for (let i = 0; i < rows; i++) {
+        let row = '';
+        for (let j = 0; j < cols; j++) {
+          if (Math.random() < 0.2) {
+            row += getRandomStar();
+            const randomSpaces = Math.floor(Math.random() * 3); // Generar número aleatorio de espacios (0-2)
+            for (let s = 0; s < randomSpaces; s++) {
+              row += ' '; // Añadir número aleatorio de espacios
+            }
+          } else {
+            row += '   '; // Añadir 3 espacios para posiciones sin estrella
+          }
+        }
+        stars += row + '\n'; // Nueva línea después de cada fila
+      }
+      return stars;
+    }
+  
+    // Función para obtener un carácter de estrella aleatorio
+    function getRandomStar() {
+      const stars = ['.', '*', '+']; // Puedes añadir más caracteres de estrella si lo necesitas
+      return stars[Math.floor(Math.random() * stars.length)];
+    }
+  
+    // Listener para cambios de tamaño del textarea
+    textarea.addEventListener('input', generateAndSetStars);
+    window.addEventListener('resize', generateAndSetStars);
+  });
