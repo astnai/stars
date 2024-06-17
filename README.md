@@ -1,10 +1,23 @@
-# Stars
+# stars
 
-This repository contains a simple webpage featuring a textarea where users can create artworks using star characters. As the textarea expands, more stars are displayed.
+a simple project that displays a textarea filled with random star characters.
 
-## Objective
+## how it works
 
-The objective of this project is to create a simple and visually appealing webpage where users can create artworks using star characters. The stars are represented within a textarea, and as the user expands the textarea, more stars are displayed.
+- the textarea is initially filled with random stars (., *, +).
+- clicking inside the textarea will add a random star character at the clicked position.
+- resizing the textarea will regenerate the star pattern.
+
+## usage
+
+1. open the `index.html` file in your browser.
+2. interact with the textarea by clicking and resizing it.
+
+## features
+
+- randomly generated stars.
+- responsive and interactive textarea.
+- smooth blinking animation for the stars.
 
 ## Preview
 
